@@ -1,0 +1,20 @@
+local log_file_path = "" --Example: C:/ModdingCustomLogs/G.A.M.M.A/custom_log.txt
+
+function log(template, ...)
+    -- Prevent crashes if string.format fails
+    local status, message = pcall(string.format, template, ...)
+    if not status then
+        log("Formatting error: " .. tostring(message))
+        return
+    end
+
+    local file = io.open(log_file_path, "a")
+    if file then
+        local timestamp = os.date("[%Y-%m-%d %H:%M:%S]")  -- Add timestamp
+        file:write(string.format("%s %s\n", timestamp, message))
+        file:close()
+    else
+        -- Fallback to engine log if the file can't be opened
+        log("Failed to open log file: " .. log_file_path)
+    end
+end
